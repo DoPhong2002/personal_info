@@ -1,26 +1,87 @@
-
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
+class MyController extends GetxController   {
 
-class MyController extends GetxController {
-  bool isSelected = false;
   String selectedImagePath = '';
-  String selectedAddress = '';
+  List<String> listJob = [];
+  String selectedExperience = 'Experience';
+  String selectedCity = 'Province/city';
+  String selectedStreet = 'Street/District';
+
+  final mySwitchValue = ValueNotifier<bool>(false);
+  final nameController = TextEditingController();
+  final phoneController = TextEditingController();
+  final emailController = TextEditingController();
+  final addressController = TextEditingController();
+  final descriptionController = TextEditingController();
+  bool onTapAnimated = false;
+  bool onTapTag = false;
+  bool checkInput = false;
+  bool lock = false;
   bool isExpanded = false;
-  void click() {
-    isSelected = !isSelected;
+  void isLock(VoidCallback onTap) {
+
+    if (lock == false && checkInput) {
+      lock = true;
+       onTap();
+      update();
+    }
+    Future.delayed(const Duration(milliseconds: 500), () {
+      lock = false;
+    });
     update();
   }
 
-void onTapAddress(String s){
-    selectedAddress = s;
+  void checkTextField(String string1, String string2) {
+    if (string1.isNotEmpty && string2.isNotEmpty) {
+      checkInput = true;
+    } else {
+      checkInput = false;
+    }
     update();
-}
-void onTapMenu(){
-  isExpanded = !isExpanded;
-  update();
-}
+  }
+
+  void startAnimation() async {
+    onTapAnimated = !onTapAnimated;
+    update();
+  }
+  void tagSelected() async {
+    onTapTag = !onTapTag;
+    update();
+  }
+
+
+
+  void onAddListJob(String s) {
+    listJob.add(s);
+    update();
+  }
+  void onRemoveListJob(String s) {
+    listJob.remove(s);
+    update();
+  }
+
+  void onAddCity(String s) {
+    selectedCity = s;
+    update();
+  }
+
+  void onAddStreet(String s) {
+    selectedStreet = s;
+    update();
+  }
+
+  void onAddExperience(String s) {
+    selectedExperience = s;
+    update();
+  }
+
+  void onTapMenu() {
+    isExpanded = !isExpanded;
+    update();
+  }
 
   selectImageFromGallery() async {
     XFile? file = await ImagePicker()
@@ -31,6 +92,7 @@ void onTapMenu(){
       return '';
     }
   }
+
   selectImageFromCamera() async {
     XFile? file = await ImagePicker()
         .pickImage(source: ImageSource.camera, imageQuality: 10);

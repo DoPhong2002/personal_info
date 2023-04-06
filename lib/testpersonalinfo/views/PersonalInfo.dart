@@ -5,147 +5,152 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_advanced_switch/flutter_advanced_switch.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
 import 'package:getx_test/testpersonalinfo/controllers/controller.dart';
-import 'package:getx_test/testpersonalinfo/widgets/myTextField.dart';
 import 'package:getx_test/testpersonalinfo/widgets/tag.dart';
-import 'package:google_fonts/google_fonts.dart';
+import '../widgets/addressType.dart';
+import '../widgets/myTextField.dart';
 
+// ignore: must_be_immutable
 class PersonalInfo extends StatelessWidget {
   PersonalInfo({super.key});
-
-  final mySwitchValue = ValueNotifier<bool>(false);
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder<MyController>(
-        init: MyController(),
-        builder: (controller) {
-          return Scaffold(
-            backgroundColor: Colors.white,
-            body: CustomScrollView(
-              slivers: [
-                SliverList(
-                  delegate: SliverChildListDelegate(
-                    [
-                      Column(
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
+      init: MyController(),
+      builder: (controller) {
+        return Scaffold(
+          backgroundColor: Colors.white,
+          body: CustomScrollView(
+            slivers: [
+              SliverList(
+                delegate: SliverChildListDelegate(
+                  [
+                    Column(
+                      children: [
+                        Container(
+                          height: 167,
+                          padding:
+                              const EdgeInsets.only(right: 32.5, left: 32.5),
+                          decoration: BoxDecoration(
                               color: Color(0xfff6E6EFF),
                               borderRadius: BorderRadius.only(
                                 topRight: Radius.circular(35),
                                 topLeft: Radius.circular(35),
                                 bottomLeft: Radius.circular(35),
                               ),
-                            ),
-                            child: Container(
-                              height: 167,
-                              margin: const EdgeInsets.only(
-                                  right: 32.5, left: 32.5),
-                              decoration: BoxDecoration(
-                                color: Color(0xfff6E6EFF),
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(35),
-                                ),
+                              border: Border.all(
+                                  color: Color(0xfff6E6EFF), width: 0)),
+                          child: Column(
+                            children: [
+                              const SizedBox(height: 87),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Image.asset(
+                                    'assets/assets_info/icons8-camera-96.png',
+                                    width: 27,
+                                    height: 27,
+                                  ),
+                                  Text(
+                                    "Personal Info",
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        color: Color(0xffffffff),
+                                        fontFamily: "NotoSans-SemiBold"),
+                                  ),
+                                  const SizedBox(width: 27)
+                                ],
                               ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                              color: Color(0xfff6E6EFF),
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(35),
+                              ),
+                              border: Border.all(
+                                  color: Color(0xfff6E6EFF), width: 0)),
+                          child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            decoration: const BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                topRight: Radius.circular(50),
+                              ),
+                              color: Colors.white,
+                            ),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 32),
                               child: Column(
                                 children: [
-                                  const SizedBox(height: 87),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Image.asset(
-                                        'assets/assets_info/icons8-camera-96.png',
-                                        width: 27,
-                                        height: 27,
-                                      ),
-                                      Text(
-                                        "Personal Info",
-                                        style: GoogleFonts.notoSans(
-                                          textStyle: const TextStyle(
-                                            fontSize: 18,
-                                            color: Color(0xffffffff),
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(width: 27)
-                                    ],
+                                  const SizedBox(height: 23),
+                                  buildAvatar(controller, context),
+                                  const SizedBox(height: 18),
+                                  MyTextField(
+                                    hintText: 'Your name',
+                                    titleText: 'Your name',
+                                    keyboardType: TextInputType.name,
+                                    controller: controller.nameController,
+                                    onChange: (_) => controller.checkTextField(
+                                        controller.phoneController.text,
+                                        controller.nameController.text),
                                   ),
+                                  const SizedBox(height: 19),
+                                  MyTextField(
+                                    titleText: 'Phone number',
+                                    hintText: 'Phone number',
+                                    keyboardType: TextInputType.number,
+                                    controller: controller.phoneController,
+                                    onChange: (_) => controller.checkTextField(
+                                        controller.phoneController.text,
+                                        controller.nameController.text),
+                                  ),
+                                  const SizedBox(height: 19),
+                                  MyTextField(
+                                    titleText: 'Email',
+                                    hintText: 'Email',
+                                    keyboardType: TextInputType.emailAddress,
+                                    controller: controller.emailController,
+                                  ),
+                                  const SizedBox(height: 19),
+                                  buildPlaceholder(),
+                                  const SizedBox(height: 23),
+                                  buildAddress(controller),
+                                  const SizedBox(height: 19),
+                                  buildExperience(controller),
+                                  const SizedBox(height: 16),
+                                  buildDescription(controller),
+                                  const SizedBox(height: 16),
+                                  buildSwitch(controller),
+                                  const SizedBox(height: 14),
+                                  buildAnimated(controller),
+                                  buildSave(controller),
+                                  const SizedBox(height: 23),
                                 ],
                               ),
                             ),
                           ),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Color(0xfff6E6EFF),
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(50),
-                              ),
-                            ),
-                            child: Container(
-                              width: MediaQuery.of(context).size.width,
-                              decoration: const BoxDecoration(
-                                borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(50),
-                                ),
-                                color: Colors.white,
-                              ),
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 32),
-                                child: Column(
-                                  children: [
-                                    const SizedBox(height: 23),
-                                    buildAvat(controller, context),
-                                    const MyTextField(
-                                      text: 'Your name',
-                                      keyboardType: TextInputType.name,
-                                    ),
-                                    const SizedBox(height: 19),
-                                    const MyTextField(
-                                      text: 'Phone number',
-                                      keyboardType: TextInputType.number,
-                                    ),
-                                    const SizedBox(height: 19),
-                                    const MyTextField(
-                                      text: 'Email',
-                                      keyboardType: TextInputType.emailAddress,
-                                    ),
-                                    const SizedBox(height: 19),
-                                    buildPlaceholder(),
-                                    const SizedBox(height: 23),
-                                    buildAddress(controller),
-                                    const SizedBox(height: 19),
-                                    buildExperience(controller),
-                                    const SizedBox(height: 16),
-                                    buildDescription(),
-                                    const SizedBox(height: 16),
-                                    buildSwitch(),
-                                    const SizedBox(height: 14),
-                                    buildJobType(controller),
-                                    const SizedBox(height: 45),
-                                    buildSave()
-                                  ],
-                                ),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
-          );
-        });
+                        )
+                      ],
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
+        );
+      },
+    );
   }
 
-  Widget buildAvat(MyController controller, BuildContext context) {
+  Widget buildAvatar(MyController controller, BuildContext context) {
     return Stack(
       children: [
         Container(
@@ -182,12 +187,6 @@ class PersonalInfo extends StatelessWidget {
               },
               child: Image.asset('assets/assets_info/icons8-camera-96.png')),
         ),
-        // Positioned.fill(
-        //   child: Align(
-        //     alignment: Alignment.center,
-        //     child:
-        //   ),
-        // )
       ],
     );
   }
@@ -203,23 +202,19 @@ class PersonalInfo extends StatelessWidget {
             children: [
               Text(
                 "Link",
-                style: GoogleFonts.notoSans(
-                  textStyle: const TextStyle(
+                style: TextStyle(
                     fontSize: 12,
                     color: Color(0xfff38385E),
-                  ),
-                ),
+                    fontFamily: "NotoSans-Bold"),
               ),
               InkWell(
                 onTap: () {},
                 child: Text(
-                  "ADD",
-                  style: GoogleFonts.notoSans(
-                    textStyle: const TextStyle(
+                  "Add",
+                  style: TextStyle(
                       fontSize: 12,
                       color: Color(0xfffB1B8C7),
-                    ),
-                  ),
+                      fontFamily: "NotoSans-Bold"),
                 ),
               ),
             ],
@@ -241,12 +236,10 @@ class PersonalInfo extends StatelessWidget {
                     const SizedBox(width: 10),
                     Text(
                       "daovu197",
-                      style: GoogleFonts.notoSans(
-                        textStyle: const TextStyle(
+                      style: TextStyle(
                           fontSize: 12,
                           color: Color(0xfff38385E),
-                        ),
-                      ),
+                          fontFamily: "NotoSans-Bold"),
                     ),
                   ],
                 ),
@@ -255,12 +248,10 @@ class PersonalInfo extends StatelessWidget {
                 onTap: () {},
                 child: Text(
                   "remove",
-                  style: GoogleFonts.notoSans(
-                    textStyle: const TextStyle(
+                  style: TextStyle(
                       fontSize: 11,
                       color: Color(0xfffF02353),
-                    ),
-                  ),
+                      fontFamily: "NotoSans-Bold"),
                 ),
               ),
             ],
@@ -275,15 +266,13 @@ class PersonalInfo extends StatelessWidget {
       child: Column(
         children: [
           Row(
-            children: [
+            children: const [
               Text(
                 "Address",
-                style: GoogleFonts.notoSans(
-                  textStyle: const TextStyle(
+                style: TextStyle(
                     fontSize: 12,
                     color: Color(0xfff38385E),
-                  ),
-                ),
+                    fontFamily: "NotoSans-Bold"),
               ),
             ],
           ),
@@ -296,56 +285,25 @@ class PersonalInfo extends StatelessWidget {
                 Row(
                   children: [
                     Expanded(
-                      child: Container(
-                        padding: const EdgeInsets.only(
-                            left: 20.0, top: 12.5, bottom: 15.5, right: 10.5),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            color: const Color(0xfffF9F9FB)),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              controller.selectedAddress == ''
-                                  ? "Province/city"
-                                  : controller.selectedAddress,
-                              style: GoogleFonts.notoSans(
-                                textStyle: const TextStyle(
-                                  fontSize: 14,
-                                  color: Color(0xfffB1B8C7),
-                                ),
-                              ),
-                            ),
-                            buildMenu(controller)
-                          ],
-                        ),
+                      child: AddressType(
+                        address: controller.selectedCity,
+                        cities: const [
+                          'function',
+                          'em bé',
+                          'dinh dưỡng',
+                          'gạo'
+                        ],
+                        controller: controller,
+                        onPressed: controller.onAddCity,
                       ),
                     ),
                     const SizedBox(width: 11),
                     Expanded(
-                      child: Container(
-                        padding: const EdgeInsets.only(
-                            left: 20.0, top: 12.5, bottom: 15.5, right: 10.5),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            color: const Color(0xfffF9F9FB)),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              controller.selectedAddress == ''
-                                  ? "Province/city"
-                                  : controller.selectedAddress,
-                              style: GoogleFonts.notoSans(
-                                textStyle: const TextStyle(
-                                  fontSize: 14,
-                                  color: Color(0xfffB1B8C7),
-                                ),
-                              ),
-                            ),
-                            buildMenu(controller)
-                          ],
-                        ),
+                      child: AddressType(
+                        address: controller.selectedStreet,
+                        cities: const ['chả lá ', 'bí đao', 'con sâu', 'da cá'],
+                        controller: controller,
+                        onPressed: controller.onAddStreet,
                       ),
                     ),
                   ],
@@ -359,17 +317,25 @@ class PersonalInfo extends StatelessWidget {
                     children: [
                       Expanded(
                         child: TextField(
+                          controller: controller.addressController,
+                          maxLines: 1,
+                          minLines: 1,
+                          maxLength: 20,
                           decoration: const InputDecoration(
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.only(
-                                left: 20.0, top: 12.5, bottom: 15.5),
-                          ),
-                          style: GoogleFonts.notoSans(
-                            textStyle: const TextStyle(
+                              border: InputBorder.none,
+                              hintText: 'Address info',
+                              hintStyle: TextStyle(
+                                  fontSize: 14,
+                                  color: Color(0xfffB1B8C7),
+                                  fontFamily: "NotoSans-Regular"),
+                              contentPadding: EdgeInsets.only(
+                                  left: 20.0, top: 12.5, bottom: 15.5),
+                              counterText: ''),
+                          style: const TextStyle(
                               fontSize: 14,
+                              // ignore: use_full_hex_values_for_flutter_colors
                               color: Color(0xfff1F1F39),
-                            ),
-                          ),
+                              fontFamily: "NotoSans-Regular"),
                         ),
                       ),
                     ],
@@ -387,59 +353,37 @@ class PersonalInfo extends StatelessWidget {
     return Column(
       children: [
         Row(
-          children: [
+          children: const [
             Text(
               "Experience",
-              style: GoogleFonts.notoSans(
-                textStyle: const TextStyle(
+              style: TextStyle(
                   fontSize: 12,
                   color: Color(0xfff38385E),
-                ),
-              ),
+                  fontFamily: "NotoSans-Bold"),
             ),
           ],
         ),
         const SizedBox(height: 10),
-        Container(
-          padding: const EdgeInsets.only(
-              left: 20.0, top: 12.5, bottom: 15.5, right: 10.5),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
-              color: const Color(0xfffF9F9FB)),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                controller.selectedAddress == ''
-                    ? "Province/city"
-                    : controller.selectedAddress,
-                style: GoogleFonts.notoSans(
-                  textStyle: const TextStyle(
-                    fontSize: 14,
-                    color: Color(0xfffB1B8C7),
-                  ),
-                ),
-              ),
-              buildMenu(controller)
-            ],
-          ),
+        AddressType(
+          address: controller.selectedExperience,
+          cities: const ['con chim', 'bong da', 'cuc cu', 'dam nhau'],
+          controller: controller,
+          onPressed: controller.onAddExperience,
         )
       ],
     );
   }
 
-  Widget buildDescription() {
+  Widget buildDescription(MyController controller) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           'Description',
-          style: GoogleFonts.notoSans(
-            textStyle: const TextStyle(
+          style: TextStyle(
               fontSize: 12,
               color: Color(0xfff38385E),
-            ),
-          ),
+              fontFamily: "NotoSans-Bold"),
         ),
         const SizedBox(height: 9),
         Container(
@@ -450,58 +394,70 @@ class PersonalInfo extends StatelessWidget {
             // color: Colors.red,
           ),
           child: TextField(
+            controller: controller.descriptionController,
             minLines: 1,
             maxLines: 4,
+            maxLength: 50,
             decoration: InputDecoration(
+              counterText: '',
               hintText: 'Description\n\n\n\n\n\n',
-              hintStyle: GoogleFonts.notoSans(
-                textStyle: const TextStyle(
+              hintStyle: TextStyle(
                   fontSize: 14,
                   color: Color(0xfffB1B8C7),
-                ),
-              ),
+                  fontFamily: "NotoSans-Regular"),
               border: InputBorder.none,
               contentPadding: const EdgeInsets.only(left: 20, top: 15),
             ),
-            style: GoogleFonts.notoSans(
-              textStyle: const TextStyle(
+            style: TextStyle(
                 fontSize: 14,
-                color: Color(0xfff1F1F39),
-              ),
-            ),
+                 color: Color(0xfff1F1F39),
+                fontFamily: "NotoSans-Regular"),
           ),
         )
       ],
     );
   }
 
-  Widget buildSwitch() {
+  Widget buildSwitch(MyController controller) {
     return Row(
       children: [
-        AdvancedSwitch(
-          controller: mySwitchValue,
-          height: 24,
-          width: 40,
-          borderRadius: const BorderRadius.all(Radius.circular(8)),
-          activeColor: const Color(0xfff3845AB),
-          inactiveColor: const Color(0xfff3845AB),
-          thumb: InkWell(
-              onTap: () {},
-              child: Container(
-                  margin: const EdgeInsets.all(2),
+        GestureDetector(
+          onTap: () {
+            controller.startAnimation();
+          },
+          child: AnimatedContainer(
+            duration: Duration(milliseconds: 200),
+            height: 24,
+            width: 40,
+            decoration: BoxDecoration(
+              color:
+                  controller.onTapAnimated ? Color(0xfff3845AB) : Colors.grey.shade300,
+              borderRadius: const BorderRadius.all(Radius.circular(8)),
+            ),
+            child: Stack(
+              children: [
+                AnimatedPositioned(
+                  duration: Duration(milliseconds: 300),
+                  left: controller.onTapAnimated ? 20 : 4,
+                  top: 4,
+                  curve: Curves.fastOutSlowIn,
                   child: SvgPicture.asset(
                     'assets/assets_info/Rectangle 24.svg',
-                  ))),
+                    width: 16,
+                    height: 16,
+                  ),
+                )
+              ],
+            ),
+          ),
         ),
         const SizedBox(width: 9),
         Text(
           'Worker',
-          style: GoogleFonts.notoSans(
-            textStyle: const TextStyle(
+          style: TextStyle(
               fontSize: 12,
               color: Color(0xfff38385E),
-            ),
-          ),
+              fontFamily: "NotoSans-Bold"),
         ),
       ],
     );
@@ -513,12 +469,10 @@ class PersonalInfo extends StatelessWidget {
       children: [
         Text(
           'Job Type',
-          style: GoogleFonts.notoSans(
-            textStyle: const TextStyle(
+          style: TextStyle(
               fontSize: 12,
               color: Color(0xfff38385E),
-            ),
-          ),
+              fontFamily: "NotoSans-Bold"),
         ),
         const SizedBox(height: 12),
         SizedBox(
@@ -527,41 +481,71 @@ class PersonalInfo extends StatelessWidget {
             alignment: WrapAlignment.start,
             spacing: 14.0,
             runSpacing: 11.0,
-            children: const [
-              MyTag(textJob: 'text b'),
-              MyTag(textJob: 'textadsfb'),
-              MyTag(textJob: 'wqer'),
-              MyTag(textJob: 'texsdffstJob'),
-              MyTag(textJob: 'texsdffstfsdJob')
+            children: [
+              MyTag(
+                textJob: 'text b',
+                controller: controller,
+              ),
+              MyTag(
+                textJob: 'textadsfb',
+                controller: controller,
+              ),
+              MyTag(
+                textJob: 'wqer',
+                controller: controller,
+              ),
+              MyTag(
+                textJob: 'texsdffstJob',
+                controller: controller,
+              ),
+              MyTag(
+                textJob: 'texsdffstfsdJob',
+                controller: controller,
+              )
             ],
           ),
-        )
+        ),
+        const SizedBox(height: 45),
       ],
     );
   }
 
-  Widget buildSave() {
-    return Container(
-      height: 46,
-      padding: const EdgeInsets.only(top: 14.6, bottom: 12.4),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(35),
-          color: const Color(0xfff3845AB)),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          const SizedBox(),
-          Text(
-            'Save',
-            style: GoogleFonts.notoSans(
-              textStyle: const TextStyle(
-                fontSize: 14,
-                color: Color(0xffffffff),
-              ),
+  Widget buildSave(MyController controller) {
+    return InkWell(
+      onTap: () {
+        controller
+            .isLock(() => print('SAVE: \nName:${controller.nameController.text}'
+                '\nPhone: ${controller.phoneController.text}'
+                '\nEmail: ${controller.emailController.text}'
+                '\nCity: ${controller.selectedCity}'
+                '\nStreet: ${controller.selectedStreet}'
+                '\nAddress info: ${controller.addressController.text}'
+                '\nExperience: ${controller.selectedExperience}'
+                '\nDescription: ${controller.descriptionController.text}'
+                '\nListJob: ${controller.listJob}'));
+      },
+      child: Container(
+        height: 46,
+        padding: const EdgeInsets.only(top: 14.6, bottom: 12.4),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(35),
+            color: (controller.lock || !controller.checkInput)
+                ? Colors.grey[400]
+                : Color(0xfff3845AB)),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: const [
+            SizedBox(),
+            Text(
+              'Save',
+              style: TextStyle(
+                  fontSize: 14,
+                  color: Color(0xffffffff),
+                  fontFamily: "NotoSans-SemiBold"),
             ),
-          ),
-          const SizedBox(),
-        ],
+            SizedBox(),
+          ],
+        ),
       ),
     );
   }
@@ -620,84 +604,19 @@ class PersonalInfo extends StatelessWidget {
     );
   }
 
-  Widget buildMenu(MyController controller) {
-    return PopupMenuButton<int>(
-      offset: const Offset(0, 0),
-      itemBuilder: (context) => [
-        PopupMenuItem<int>(
-            value: 0,
-            child: Text(
-              'Ha Noi',
-              style: GoogleFonts.notoSans(
-                textStyle: const TextStyle(
-                  fontSize: 14,
-                  color: Colors.black,
-                ),
-              ),
-            )),
-        PopupMenuItem<int>(
-          value: 1,
-          child: Text(
-            'TP HCM',
-            style: GoogleFonts.notoSans(
-              textStyle: const TextStyle(
-                fontSize: 14,
-                color: Colors.black,
-              ),
-            ),
-          ),
-        ),
-        PopupMenuItem<int>(
-          value: 2,
-          child: Text(
-            'Da Nang',
-            style: GoogleFonts.notoSans(
-              textStyle: const TextStyle(
-                fontSize: 14,
-                color: Colors.black,
-              ),
-            ),
-          ),
-        ),
-        PopupMenuItem<int>(
-          value: 3,
-          child: Text(
-            'Hai Phong',
-            style: GoogleFonts.notoSans(
-              textStyle: const TextStyle(
-                fontSize: 14,
-                color: Colors.black,
-              ),
-            ),
-          ),
-        ),
-      ],
-      onSelected: (value) {
-        switch (value) {
-          case 0:
-            controller.onTapAddress('Ha Noi');
-            break;
-          case 1:
-            controller.onTapAddress('TP HCM');
-            break;
-          case 2:
-            controller.onTapAddress('Da Nang');
-            break;
-          case 3:
-            controller.onTapAddress('Hai Phong');
-            break;
-        }
-      },
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: const [
-          Icon(
-            Icons.arrow_drop_down,
-            size: 16,
-          ),
-        ],
-      ),
-    );
+  Widget buildAnimated(MyController controller) {
+    return AnimatedContainer(
+        duration: Duration(milliseconds: 300),
+        curve: Curves.fastOutSlowIn,
+        height: controller.onTapAnimated ? null : 0,
+        child: buildJobType(controller)
+        // AnimatedContainer(
+        //   duration: Duration(milliseconds: 300),
+        //   decoration: BoxDecoration(
+        //     color:controller.status?  Colors.yellow : Colors.red,
+        //     borderRadius: BorderRadius.circular(25),
+        //   ),
+        // ),
+        );
   }
 }
- 

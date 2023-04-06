@@ -49,6 +49,10 @@ dependencies:
   flutter_svg: ^2.0.4
   image_picker: ^0.8.6
   lottie: ^2.3.1
+  flutter_switch: ^0.3.2
+  hive_flutter: ^1.1.0
+  shared_preferences: ^2.0.15
+  flutter_secure_storage: ^6.0.0
 
 
 dev_dependencies:
@@ -92,10 +96,16 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
+  fonts:
+    - family: NotoSans-Bold
+      fonts:
+        - asset: fonts/NotoSans-Bold.ttf
+    - family: NotoSans-SemiBold
+      fonts:
+        - asset: fonts/FontsFree-Net-NotoSans-SemiBold.ttf
+    - family: NotoSans-Regular
+      fonts:
+        - asset: fonts/NotoSans-Regular.ttf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro
