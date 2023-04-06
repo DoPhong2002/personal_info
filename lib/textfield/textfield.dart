@@ -12,10 +12,7 @@ class TextFieldPage extends StatefulWidget {
 class _TextFieldPageState extends State<TextFieldPage> {
   String passwordError = '';
   bool isEmail(String email) {
-    // Xây dựng biểu thức chính quy kiểm tra định dạng email
     final emailRegex = RegExp(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b');
-
-    // Kiểm tra sự khớp của chuỗi email với biểu thức chính quy
     return emailRegex.hasMatch(email);
   }
   @override
@@ -25,14 +22,14 @@ class _TextFieldPageState extends State<TextFieldPage> {
       builder: (controller) {
         return Scaffold(
           appBar: AppBar(
-            title: Text('TexField'),
+            title: const Text('TexField'),
           ),
           body: SafeArea(
             child: SingleChildScrollView(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 100,
                   ),
                   TextFormField(

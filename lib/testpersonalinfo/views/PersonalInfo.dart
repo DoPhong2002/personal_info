@@ -15,7 +15,7 @@ import '../widgets/myTextField.dart';
 
 // ignore: must_be_immutable
 class PersonalInfo extends StatelessWidget {
-  PersonalInfo({super.key});
+  const PersonalInfo({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -51,8 +51,8 @@ class PersonalInfo extends StatelessWidget {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Image.asset(
-                                    'assets/assets_info/icons8-camera-96.png',
+                                  SvgPicture.asset(
+                                    'assets/assets_info/Back.svg',
                                     width: 27,
                                     height: 27,
                                   ),
@@ -94,30 +94,48 @@ class PersonalInfo extends StatelessWidget {
                                   buildAvatar(controller, context),
                                   const SizedBox(height: 18),
                                   MyTextField(
-                                    hintText: 'Your name',
-                                    titleText: 'Your name',
-                                    keyboardType: TextInputType.name,
-                                    controller: controller.nameController,
-                                    onChange: (_) => controller.checkTextField(
-                                        controller.phoneController.text,
-                                        controller.nameController.text),
-                                  ),
+                                      controller2: controller,
+                                      hintText: 'Your name',
+                                      titleText: 'Your name',
+                                      errorText: controller.errorName,
+                                      keyboardType: TextInputType.name,
+                                      controller: controller.nameController,
+                                      onChange: (_) {
+                                        controller.checkTextField(
+                                          controller.phoneController.text,
+                                          controller.nameController.text,
+                                        );
+                                        controller.error3();
+                                      }),
                                   const SizedBox(height: 19),
                                   MyTextField(
+                                    controller2: controller,
                                     titleText: 'Phone number',
                                     hintText: 'Phone number',
+                                    errorText: controller.errorNumber,
                                     keyboardType: TextInputType.number,
                                     controller: controller.phoneController,
-                                    onChange: (_) => controller.checkTextField(
-                                        controller.phoneController.text,
-                                        controller.nameController.text),
+                                    onChange: (_) {
+                                      controller.checkTextField(
+                                          controller.phoneController.text,
+                                          controller.nameController.text);
+                                      controller.error1();
+                                    },
                                   ),
                                   const SizedBox(height: 19),
                                   MyTextField(
+                                    controller2: controller,
                                     titleText: 'Email',
                                     hintText: 'Email',
+                                    errorText: controller.errorEmail,
                                     keyboardType: TextInputType.emailAddress,
                                     controller: controller.emailController,
+                                    onChange: (_) {
+                                      controller.checkTextField(
+                                          controller.phoneController.text,
+                                          controller.nameController.text);
+                                      controller.error2();
+                                    },
                                   ),
                                   const SizedBox(height: 19),
                                   buildPlaceholder(),
@@ -309,37 +327,52 @@ class PersonalInfo extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 9),
-                Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      color: const Color(0xfffF9F9FB)),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          controller: controller.addressController,
-                          maxLines: 1,
-                          minLines: 1,
-                          maxLength: 20,
-                          decoration: const InputDecoration(
-                              border: InputBorder.none,
-                              hintText: 'Address info',
-                              hintStyle: TextStyle(
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          color: const Color(0xfffF9F9FB)),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              onChanged: (_) => controller.error4(),
+                              controller: controller.addressController,
+                              maxLines: 1,
+                              minLines: 1,
+                              maxLength: 20,
+                              decoration: const InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: 'Address info',
+                                  hintStyle: TextStyle(
+                                      fontSize: 14,
+                                      color: Color(0xfffB1B8C7),
+                                      fontFamily: "NotoSans-Regular"),
+                                  contentPadding: EdgeInsets.only(
+                                      left: 20.0, top: 12.5, bottom: 15.5),
+                                  counterText: ''),
+                              style: const TextStyle(
                                   fontSize: 14,
-                                  color: Color(0xfffB1B8C7),
+                                  color: Color(0xfff1F1F39),
                                   fontFamily: "NotoSans-Regular"),
-                              contentPadding: EdgeInsets.only(
-                                  left: 20.0, top: 12.5, bottom: 15.5),
-                              counterText: ''),
-                          style: const TextStyle(
-                              fontSize: 14,
-                              // ignore: use_full_hex_values_for_flutter_colors
-                              color: Color(0xfff1F1F39),
-                              fontFamily: "NotoSans-Regular"),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    if (controller.errorAddress != null) ...{
+                      Text(
+                        '*${controller.errorAddress}',
+                        style: const TextStyle(
+                          fontSize: 8,
+                          color: Colors.red,
+                          fontFamily: "NotoSans-Regular",
                         ),
                       ),
-                    ],
-                  ),
+                    },
+                  ],
                 )
               ],
             ),
@@ -386,33 +419,49 @@ class PersonalInfo extends StatelessWidget {
               fontFamily: "NotoSans-Bold"),
         ),
         const SizedBox(height: 9),
-        Container(
-          height: 118,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
-            color: const Color(0xfffF9F9FB),
-            // color: Colors.red,
-          ),
-          child: TextField(
-            controller: controller.descriptionController,
-            minLines: 1,
-            maxLines: 4,
-            maxLength: 50,
-            decoration: InputDecoration(
-              counterText: '',
-              hintText: 'Description\n\n\n\n\n\n',
-              hintStyle: TextStyle(
-                  fontSize: 14,
-                  color: Color(0xfffB1B8C7),
-                  fontFamily: "NotoSans-Regular"),
-              border: InputBorder.none,
-              contentPadding: const EdgeInsets.only(left: 20, top: 15),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              height: 118,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                color: const Color(0xfffF9F9FB),
+                // color: Colors.red,
+              ),
+              child: TextField(
+                onChanged: (_) => controller.error5(),
+                controller: controller.descriptionController,
+                minLines: 1,
+                maxLines: 4,
+                maxLength: 50,
+                decoration: InputDecoration(
+                  counterText: '',
+                  hintText: 'Description\n\n\n\n\n\n',
+                  hintStyle: TextStyle(
+                      fontSize: 14,
+                      color: Color(0xfffB1B8C7),
+                      fontFamily: "NotoSans-Regular"),
+                  border: InputBorder.none,
+                  contentPadding: const EdgeInsets.only(left: 20, top: 15),
+                ),
+                style: TextStyle(
+                    fontSize: 14,
+                    color: Color(0xfff1F1F39),
+                    fontFamily: "NotoSans-Regular"),
+              ),
             ),
-            style: TextStyle(
-                fontSize: 14,
-                 color: Color(0xfff1F1F39),
-                fontFamily: "NotoSans-Regular"),
-          ),
+            if (controller.errorDescription != null) ...{
+              Text(
+                '*${controller.errorDescription}',
+                style: const TextStyle(
+                  fontSize: 8,
+                  color: Colors.red,
+                  fontFamily: "NotoSans-Regular",
+                ),
+              ),
+            },
+          ],
         )
       ],
     );
@@ -430,8 +479,9 @@ class PersonalInfo extends StatelessWidget {
             height: 24,
             width: 40,
             decoration: BoxDecoration(
-              color:
-                  controller.onTapAnimated ? Color(0xfff3845AB) : Colors.grey.shade300,
+              color: controller.onTapAnimated
+                  ? Color(0xfff3845AB)
+                  : Colors.grey.shade300,
               borderRadius: const BorderRadius.all(Radius.circular(8)),
             ),
             child: Stack(
@@ -513,23 +563,31 @@ class PersonalInfo extends StatelessWidget {
   Widget buildSave(MyController controller) {
     return InkWell(
       onTap: () {
-        controller
-            .isLock(() => print('SAVE: \nName:${controller.nameController.text}'
-                '\nPhone: ${controller.phoneController.text}'
-                '\nEmail: ${controller.emailController.text}'
-                '\nCity: ${controller.selectedCity}'
-                '\nStreet: ${controller.selectedStreet}'
-                '\nAddress info: ${controller.addressController.text}'
-                '\nExperience: ${controller.selectedExperience}'
-                '\nDescription: ${controller.descriptionController.text}'
-                '\nListJob: ${controller.listJob}'));
+        controller.isLock(() {
+          print('SAVE: \nName:${controller.nameController.text}'
+              '\nPhone: ${controller.phoneController.text}'
+              '\nEmail: ${controller.emailController.text}'
+              '\nCity: ${controller.selectedCity}'
+              '\nStreet: ${controller.selectedStreet}'
+              '\nAddress info: ${controller.addressController.text}'
+              '\nExperience: ${controller.selectedExperience}'
+              '\nDescription: ${controller.descriptionController.text}'
+              '\nListJob: ${controller.listJob}');
+          controller.error2();
+          controller.error1();
+          controller.error3();
+          controller.error4();
+          controller.error5();
+
+        });
       },
       child: Container(
         height: 46,
         padding: const EdgeInsets.only(top: 14.6, bottom: 12.4),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(35),
-            color: (controller.lock || !controller.checkInput)
+            // color: (controller.lock || !controller.checkInput)
+            color: (controller.lock)
                 ? Colors.grey[400]
                 : Color(0xfff3845AB)),
         child: Row(
@@ -609,14 +667,6 @@ class PersonalInfo extends StatelessWidget {
         duration: Duration(milliseconds: 300),
         curve: Curves.fastOutSlowIn,
         height: controller.onTapAnimated ? null : 0,
-        child: buildJobType(controller)
-        // AnimatedContainer(
-        //   duration: Duration(milliseconds: 300),
-        //   decoration: BoxDecoration(
-        //     color:controller.status?  Colors.yellow : Colors.red,
-        //     borderRadius: BorderRadius.circular(25),
-        //   ),
-        // ),
-        );
+        child: buildJobType(controller));
   }
 }
