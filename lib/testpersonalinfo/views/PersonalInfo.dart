@@ -564,21 +564,27 @@ class PersonalInfo extends StatelessWidget {
     return InkWell(
       onTap: () {
         controller.isLock(() {
-          print('SAVE: \nName:${controller.nameController.text}'
-              '\nPhone: ${controller.phoneController.text}'
-              '\nEmail: ${controller.emailController.text}'
-              '\nCity: ${controller.selectedCity}'
-              '\nStreet: ${controller.selectedStreet}'
-              '\nAddress info: ${controller.addressController.text}'
-              '\nExperience: ${controller.selectedExperience}'
-              '\nDescription: ${controller.descriptionController.text}'
-              '\nListJob: ${controller.listJob}');
+          if (controller.errorName == null &&
+              controller.errorDescription == null &&
+              controller.errorAddress == null &&
+              controller.errorNumber == null &&
+              controller.errorEmail == null) {
+            print('SAVE: '
+                '\nName: ${controller.nameController.text}'
+                '\nPhone: ${controller.phoneController.text}'
+                '\nEmail: ${controller.emailController.text}'
+                '\nCity: ${controller.selectedCity}'
+                '\nStreet: ${controller.selectedStreet}'
+                '\nAddress info: ${controller.addressController.text}'
+                '\nExperience: ${controller.selectedExperience}'
+                '\nDescription: ${controller.descriptionController.text}'
+                '\nListJob: ${controller.listJob}');
+          }
           controller.error2();
           controller.error1();
           controller.error3();
           controller.error4();
           controller.error5();
-
         });
       },
       child: Container(
@@ -587,9 +593,7 @@ class PersonalInfo extends StatelessWidget {
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(35),
             // color: (controller.lock || !controller.checkInput)
-            color: (controller.lock)
-                ? Colors.grey[400]
-                : Color(0xfff3845AB)),
+            color: (controller.lock) ? Colors.grey[400] : Color(0xfff3845AB)),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: const [

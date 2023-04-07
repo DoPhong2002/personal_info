@@ -22,7 +22,7 @@ class MyController extends GetxController {
   final descriptionController = TextEditingController();
   bool onTapAnimated = false;
   bool onTapTag = false;
-  bool checkInput = true;
+  bool checkInput = false;
   bool lock = false;
   bool isExpanded = false;
   bool isMissingInput = false;
@@ -100,11 +100,11 @@ class MyController extends GetxController {
   }
 
   void checkTextField(String string1, String string2) {
-    // if (string1.isNotEmpty && string2.isNotEmpty) {
-    //   checkInput = true;
-    // } else {
-    //   checkInput = false;
-    // }
+    if (string1.isNotEmpty && string2.isNotEmpty) {
+      checkInput = true;
+    } else {
+      checkInput = false;
+    }
     update();
   }
 
